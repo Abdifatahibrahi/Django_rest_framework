@@ -1,6 +1,16 @@
+from pyexpat import model
 from django.shortcuts import render
 from django.http import JsonResponse
+from products.models import Product
 
 
 def api_home(request, *args, **kwargs):
-    return JsonResponse({"message": "Hi there, this is your Django API response!!"})
+    data = {}
+    model_data = Product.objects.all().order_by('?').first()
+
+    if model_data:
+        data['id'] = model_data.id
+        data['title'] = model_data.title
+        data['content'] = model_data.content
+        data['price'] = model_data.price
+    return JsonResponse(data)
